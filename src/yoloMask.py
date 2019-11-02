@@ -14,7 +14,7 @@ import os
 import util
 
 class generateMask(object):
-    def __init__(self, vis):
+    def __init__(self, vis=False):
         self.path = os.getcwd()
         self.vis = vis  # flag for visualization
 
@@ -50,22 +50,39 @@ class generateMask(object):
         extRight = tuple(c[c[:, :, 0].argmax()][0])
         extTop = tuple(c[c[:, :, 1].argmin()][0])
         extBot = tuple(c[c[:, :, 1].argmax()][0])
-
-        bbox_coord = (extLeft, extRight, extTop, extBot)
-        
+        bbox_coord = (extLeft[0], extTop[1], extRight[0], extBot[1])
+       
+        # apply mask
         masked = frame.copy()
         for i in range(3):
             masked[:, :, i] *= (mask != 0)
 
+        # show image if in test mode
         if self.vis:
+            print('visualize')
             cv2.drawContours(frame, [c], -1, (255, 255, 255), 0)
             cv2.rectangle(frame, (extLeft[0], extTop[1]), (extRight[0], extBot[1]), (0, 0, 255), thickness=10) # (0,0,255) is red for opencv
                 
-            # display for visual checking
             util.showimg(masked, bgr=True)
             util.showimg(frame, bgr=True)
 	
-        return mask
+        return masked, bbox_coord
+
+    def save_mask(self, mask, ind):
+        path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data'))
+        path = path + '/' + 'mask/'
+        if not os.path.exists(path):
+           os.makedirs(path)
+        self.maskname = path + f'{self.obj_name}_mask_{int(ind/10)}.jpg'
+        cv2.imwrite(self.maskname, mask)
+
+    def save_bbox(self, bbox_coord):
+        path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data'))
+        path = path + '/' + 'mask/'
+        bbox_test = path + f'{self.obj_name}_mask_bbox.txt'
+        f = open(bbox_test, 'a+')
+        f.write(f'{self.maskname},{(bbox_coord[0], bbox_coord[1])},{(bbox_coord[2], bbox_coord[3])}\n')
+
 
 def main():
     """
@@ -85,30 +102,50 @@ def main():
     assert (args['mode'] == 'test' or args['mode'] == 'generate'), 'Mode should be either \'test\' or \'generate\'.'
     
     # get path
-    PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'video')) 
+    PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data', 'video')) 
 
-    # video files
+    # video file
     vid_file = PATH + '/' + args['video']
 
     # mode selection
     if args['mode'] == 'test':
+        print('[INFO] test mode initiated')
         vis = True # visualization flag
-        gen_mask = generateMask(vis)
-        gen_mask.set_objName(args['object'])
-        gen_mask.set_thresh(args['thresh'])
+        test_mask = generateMask(vis)
+        test_mask.set_thresh(args['thresh'])
 
-        cap = gen_mask.load_video(vid_file)
+        # test on the first frame
+        cap = test_mask.load_video(vid_file)
+        print('[INFO] video file loaded')
         while True:
             ret, frame = cap.read()
             if ret:
-                _ = gen_mask.create_mask(frame)
+                _, _ = test_mask.create_mask(frame)
             break    
+        cap.release()
 
     elif args['mode'] == 'generate':
-        pass
-    else:
-        pass
+        print('[INFO] generate mode initiated')
+        gen_mask = generateMask()
+        gen_mask.set_objName(args['object'])
+        gen_mask.set_thresh(args['thresh'])
 
+        # iterate through all the frames
+        cap = gen_mask.load_video(vid_file)
+        print('[INFO] video file loaded')
+        ind = 0 # frame index
+        while True:
+            ret, frame = cap.read()
+            if ret and ind % 10 == 0:   # 3 pics/sec
+                masked, bbox = gen_mask.create_mask(frame)
+                gen_mask.save_mask(masked, ind)
+                gen_mask.save_bbox(bbox)
+                print(f'[INFO] mask #{int(ind/10)} saved') 
+            ind += 1
+            if not ret:
+                break
+        cap.release()
+    
 if __name__ == '__main__':
     main()
 
