@@ -39,6 +39,22 @@ def showimg_file(file):
     imgplot = plt.imshow(img)
     plt.show()
 
+def get_contours(cnts):
+    """
+    checks the openCV version and returns the contours 
+    """
+    # if '2', it's OpenCV v2.4 or v4
+    if len(cnts) == 2:
+        cnts = cnts[0]
+    # if '3', it's OpenCV v3,
+    elif len(cnts) == 3:
+        cnts = cnts[1]
+    # Otherwise, raise error
+    else:
+        raise Exception(("Unknown Contour Length, Check the OpenCV version"))
+    
+    return cnts
+
 def rotate_bound(image, angle):
     """
     rotates an image around the centor point avoiding the unwanted translation
