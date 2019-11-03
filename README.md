@@ -31,7 +31,7 @@ matplotlib
 - Put video file in the `data/video` dir  
     - **You can change the intensity threshold to find the object in the frame but it is recommended to record a video of an object with black background. It'd generally work well if you have the background of contrasting color**  
     - Screeshot of video shown below   
-        <img src='https://github.com/sohn21c/yoloMask/blob/master/img/IMG_1578.jpg?raw=true' width='200'>  
+        <img src='https://github.com/sohn21c/yoloMask/blob/master/img/IMG_1578.jpg?raw=true' width='300'>  
   
 - Argument
 ```
@@ -48,8 +48,8 @@ matplotlib
         `python yoloMask.py -m generate -v IMG_0341.MOV -o hand -t 100 255`  
   
 ## Output
-- Mask of an image
-    <img src='https://github.com/sohn21c/yoloMask/blob/master/img/hand_mask_10.jpg?raw=true' width='200'>  
+- Mask of an image  
+    <img src='https://github.com/sohn21c/yoloMask/blob/master/img/hand_mask_10.jpg?raw=true' width='300'>  
 - Text file with bounding box coordinates  
     ```
     <path-to-repo>/data/mask/hand_mask_0.jpg,(577, 132),(1653, 937)
