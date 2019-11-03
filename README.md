@@ -10,6 +10,7 @@ This script was created to help easily create a object detection data set by put
 2. [Run](#run)
 3. [Output](#output)
 4. [What's missing](#what's-missing)
+5. [Script](#script)
 
 ## Environment setup
 This code has been tested on Ubuntu 18.04, Python 3.7  
@@ -22,15 +23,15 @@ matplotlib
 
 ## Run
 - Clone the repo
-`git clone https://github.com/sohn21c/yoloMask && cd yoloMask`  
+    `git clone https://github.com/sohn21c/yoloMask && cd yoloMask`  
 
 - Create directory for data
-`mkdir data && mkdir data/video`  
+    `mkdir data && mkdir data/video`  
 
 - Put video file in the `data/video` dir  
- - **You can change the intensity threshold to find the object in the frame but it is recommended to record a video of an object with black background. It'd generally work well if you have the background of contrasting color**  
- - Screeshot of video shown below   
-  <img src='https://github.com/sohn21c/yoloMask/blob/master/img/IMG_1578.jpg?raw=true' width='200'>  
+    - **You can change the intensity threshold to find the object in the frame but it is recommended to record a video of an object with black background. It'd generally work well if you have the background of contrasting color**  
+    - Screeshot of video shown below   
+        <img src='https://github.com/sohn21c/yoloMask/blob/master/img/IMG_1578.jpg?raw=true' width='200'>  
   
 - Argument
 ```
@@ -41,11 +42,27 @@ matplotlib
 ```
 
 - Command run
- - test mode: to test image extraction threshold. One image will be displayed for verification
-  `python yoloMask.py -m test -v IMG_0341.MOV -o hand -t 100 255`  
- - generate mode: once threshold is set, one can run the command below to process the video in its entirety generating multiple masks for an object  
-  `python yoloMask.py -m generate -v IMG_0341.MOV -o hand -t 100 255`  
+    - test mode: to test image extraction threshold. One image will be displayed for verification
+        `python yoloMask.py -m test -v IMG_0341.MOV -o hand -t 100 255`  
+    - generate mode: once threshold is set, one can run the command below to process the video in its entirety generating multiple masks for an object  
+        `python yoloMask.py -m generate -v IMG_0341.MOV -o hand -t 100 255`  
   
 ## Output
 - Mask of an image
+    <img src='https://github.com/sohn21c/yoloMask/blob/master/img/hand_mask_10.jpg?raw=true' width='200'>  
+- Text file with bounding box coordinates  
+    ```
+    <path-to-repo>/data/mask/hand_mask_0.jpg,(577, 132),(1653, 937)
+    <path-to-repo>/data/mask/hand_mask_1.jpg,(544, 100),(1696, 972)
+    ...
+    ```
+    
+## What's missing  
+- Control over the number of masks  
+    Currently, the feature generates a mask per 1/3 sec (10hz). If one wants to manipulate the number of generated masks, please change [here](https://github.com/sohn21c/yoloMask/blob/111e4f4c0dce0710d9d7f285df7a96ed8023eb43/src/yoloMask.py#L139)  
 
+- Feature to check the quality of mask and get rid of the bad  
+    There's a high chance that your first couple frames and the last from the video record may not have captured the object properly and produced the bad mask. You need to get rid of them manually.  
+    
+## Script
+[This script here](https://github.com/sohn21c/yoloMask/blob/master/scripts/hand_mask_generation.ipynb) shows what each line of the code does with in-line pictures as well. It'd help you understand the code.  
