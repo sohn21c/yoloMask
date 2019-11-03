@@ -73,4 +73,4 @@ matplotlib
     There's a high chance that your first couple frames and the last from the video record may not have captured the object properly and produced the bad mask. You need to get rid of them manually.  
     
 ## Script
-[This script here](https://github.com/sohn21c/yoloMask/blob/master/scripts/hand_mask_generation.ipynb) shows what each line of the code does with in-line pictures as well. It'd help you understand the code.  
+- [This script here](https://github.com/sohn21c/yoloMask/blob/master/scripts/hand_mask_generation.ipynb) shows what each line of the code does with in-line pictures as well. It'd help you understand the code.  
