@@ -3,7 +3,7 @@
 **This is Part 1 of 2 to create custom dataset for YOLO. You'll find the link to the Part 2 as soon as I upload**
 
 ## Objective
-This script was created to help easily create a object detection data set by putting a mask of object of interest to random backgrounds. Instead of taking many pictures of an object of interest, we can record a quick video of an object and extract the relevant information at different view points.
+This script was to help easily create a object detection data set by putting a mask of object of interest to random backgrounds. Instead of taking many pictures of an object of interest, one can record a quick video of an object and extract the relevant information at different view points by recording the moving objects in the video.
 
 ## Contents
 1. [Envionment Setup](#environment-setup)
