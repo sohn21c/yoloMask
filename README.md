@@ -22,10 +22,10 @@ matplotlib
 ```
 
 ## Run
-- Clone the repo
+- Clone the repo  
     `git clone https://github.com/sohn21c/yoloMask && cd yoloMask`  
 
-- Create directory for data
+- Create directory for data  
     `mkdir data && mkdir data/video`  
 
 - Put video file in the `data/video` dir  
@@ -42,9 +42,9 @@ matplotlib
 ```
 
 - Command run
-    - test mode: to test image extraction threshold. One image will be displayed for verification
+    - test mode: to test image extraction threshold. One image will be displayed for verification  
         `python yoloMask.py -m test -v IMG_0341.MOV -o hand -t 100 255`  
-    - generate mode: once threshold is set, one can run the command below to process the video in its entirety generating multiple masks for an object  
+    - generate mode: once threshold is set, one can run the command below to process the video in its entirety generating multiple masks for an object   
         `python yoloMask.py -m generate -v IMG_0341.MOV -o hand -t 100 255`  
   
 ## Output
