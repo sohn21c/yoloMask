@@ -34,25 +34,30 @@ matplotlib
         <img src='https://github.com/sohn21c/yoloMask/blob/master/img/IMG_1578.jpg?raw=true' width='300'>  
   
 - Argument
-```
--m MODE,   --mode   MODE   test or generate
--v VIDEO,  --video  VIDEO  video file
--o OBJECT, --object OBJECT name of an object
--t THRESH, --thresh THRESH image extraction threshold. Range between 0-255
-```
+    ```
+    -m MODE,   --mode   MODE   test or generate
+    -v VIDEO,  --video  VIDEO  video file
+    -o OBJECT, --object OBJECT name of an object
+    -t THRESH, --thresh THRESH image extraction threshold. Range between 0-255
+    ```
 
 - Command run
-    - test mode: to test image extraction threshold. One image will be displayed for verification  
+    - test mode:  
+        to test image extraction threshold. One image will be displayed for verification  
         `python yoloMask.py -m test -v IMG_0341.MOV -o hand -t 100 255`  
-    - generate mode: once threshold is set, one can run the command below to process the video in its entirety generating multiple masks for an object   
+        
+    - generate mode:  
+        once threshold is set, one can run the command below to process the video in its entirety generating multiple masks for an object   
         `python yoloMask.py -m generate -v IMG_0341.MOV -o hand -t 100 255`  
   
 ## Output
 - Mask of an image  
     - Output Mask  
         <img src='https://github.com/sohn21c/yoloMask/blob/master/img/output1.png?raw=true' width='300'>  
+        
     - Sample image with bbox. **Not an output**  
         <img src='https://github.com/sohn21c/yoloMask/blob/master/img/output2.png?raw=true' width='300'>  
+        
 - Text file with bounding box coordinates  
     ```
     <path-to-repo>/data/mask/hand_mask_0.jpg,(577, 132),(1653, 937)
