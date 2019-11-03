@@ -49,8 +49,10 @@ matplotlib
   
 ## Output
 - Mask of an image  
-    <img src='https://github.com/sohn21c/yoloMask/blob/master/img/output1.png?raw=true' width='300'>  
-    <img src='https://github.com/sohn21c/yoloMask/blob/master/img/output2.png?raw=true' width='300'>  
+    - Output Mask  
+        <img src='https://github.com/sohn21c/yoloMask/blob/master/img/output1.png?raw=true' width='300'>  
+    - Sample image with bbox. **Not an output**  
+        <img src='https://github.com/sohn21c/yoloMask/blob/master/img/output2.png?raw=true' width='300'>  
 - Text file with bounding box coordinates  
     ```
     <path-to-repo>/data/mask/hand_mask_0.jpg,(577, 132),(1653, 937)
