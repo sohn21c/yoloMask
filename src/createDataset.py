@@ -22,9 +22,35 @@ class createDataset(object):
         for item in targets:
             res.append(item)
         self.target = res
-        print(self.target)
 
+    def set_size(self, size):
+        self.dtSize = size
 
+    def load_labels(self, pathLabel):
+        self.pathLabel = pathLabel
+        self.labelList = os.listdir(pathLabel)
+
+    def count_target(self):
+        tally = {}
+        for obj in self.target:
+            tally[obj] = 0
+
+        ind = 0
+        for label in self.labelList:
+            filename = self.pathLabel + label
+            f = open(filename, 'r')
+            content = f.read().split('\n')
+            for line in content:
+                items = line.split(' ')
+                if items[0] in self.target:
+                    tally[items[0]] += 1
+            f.close()
+            if ind % 100 == 0:
+                print(f'[COUNT] {ind} of {len(self.labelList)} processed')
+            ind += 1
+        
+        print('[COUNT] done counting targets in dataset')
+        print(tally)
 
 def main():
     """
@@ -53,6 +79,8 @@ def main():
     if mode == 'train':
         c = createDataset()
         c.set_target(TARGET)
+        c.load_labels(TRAIN_LABEL)
+        c.count_target()
 
     elif mode == 'test':
         pass
