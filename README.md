@@ -64,13 +64,13 @@ matplotlib
     <path-to-repo>/data/mask/hand_mask_1.jpg,(544, 100),(1696, 972)
     ...
     ```
-    
+## Script
+- [This script here](https://github.com/sohn21c/yoloMask/blob/master/scripts/hand_mask_generation.ipynb) shows what each line of the code does with in-line pictures as well. It'd help you understand the code.  
+  
 ## What's missing  
 - Control over the number of masks  
-    Currently, the feature generates a mask per 1/3 sec (10hz). If one wants to manipulate the number of generated masks, please change [here](https://github.com/sohn21c/yoloMask/blob/111e4f4c0dce0710d9d7f285df7a96ed8023eb43/src/yoloMask.py#L139)  
+    Currently, the feature generates a mask per 1/3 sec (10hz). If one wants to manipulate the number of generated masks, please modify the part [here](https://github.com/sohn21c/yoloMask/blob/111e4f4c0dce0710d9d7f285df7a96ed8023eb43/src/yoloMask.py#L139)  
 
 - Feature to check the quality of mask and get rid of the bad  
     There's a high chance that your first couple frames and the last from the video record may not have captured the object properly and produced the bad mask. You need to get rid of them manually.  
     
-## Script
-- [This script here](https://github.com/sohn21c/yoloMask/blob/master/scripts/hand_mask_generation.ipynb) shows what each line of the code does with in-line pictures as well. It'd help you understand the code.  
