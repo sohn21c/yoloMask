@@ -9,6 +9,23 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
 
+def parse_cfg(path):
+    """
+    parses the configuration file and returns dict
+
+    args:
+        path: full path to the configuration file from the pkg root dir
+    """
+    res = {}
+    f = open(path, 'r')
+    lines = f.read().split('\n')
+    for line in lines:
+        if len(line) != 0:
+            items = line.split('=')
+            res[items[0]] = items[1]
+
+    return res
+
 def showimg(img, bgr=False, gray=False):
     """
     shows the image, being handled with opencv, in-line with matplotlib
