@@ -12,6 +12,19 @@ import numpy as np
 import os
 import util
 
+class createDataset(object):
+    def __init__(self):
+        pass
+   
+    def set_target(self, target):
+        res = []
+        targets = target.split(',')
+        for item in targets:
+            res.append(item)
+        self.target = res
+        print(self.target)
+
+
 
 def main():
     """
@@ -31,8 +44,20 @@ def main():
 
     # parse configuration file
     info = util.parse_cfg(args['cfg'])
+    for key, val in info.items():
+        #exec(key + '=val')
+        globals()[key] = val
+    
+    # body 
+    mode = args['mode']
+    if mode == 'train':
+        c = createDataset()
+        c.set_target(TARGET)
 
-
+    elif mode == 'test':
+        pass
+    else: 
+        pass
 
 if __name__ == '__main__':
     main()
