@@ -1,6 +1,6 @@
 """
 Author: James Sohn
-Last Modified: 11/04/19
+Last Modified: 11/06/19
 
 This script is to create a dataset to train YOLO by adding custom object masks to random backgrounds while rotating, scaling and jittering color. For more details about the code, please visit the github repo listed below.
 
@@ -299,11 +299,16 @@ def main():
         c.set_target(TARGET)
         c.set_size(6000)
         c.load_labels(TRAIN_LABEL)
-        c.set_dest(mode, DET, 'blah')
+        c.set_dest(mode, DET, 'COCO_2014_train')
         c.create()
 
     elif mode == 'test':
-        pass
+        c = createDataset()
+        c.set_target(TARGET)
+        c.set_size(2000)
+        c.load_labels(VAL_LABEL)
+        c.set_dest(mode, DET, 'COCO_2014_test')
+        c.create()
     
     else: 
         which = input('Which dataset? train or test? > ')
