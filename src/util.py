@@ -9,6 +9,22 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
 
+def get_contours(cnts):
+    """
+    checks the openCV version and returns the contours 
+    """
+    # if '2', it's OpenCV v2.4 or v4
+    if len(cnts) == 2:
+        cnts = cnts[0]
+    # if '3', it's OpenCV v3,
+    elif len(cnts) == 3:
+        cnts = cnts[1]
+    # Otherwise, raise error
+    else:
+        raise Exception(("Unknown Contour Length, Check the OpenCV version"))
+    
+    return cnts
+
 def parse_cfg(path):
     """
     parses the configuration file and returns dict
@@ -26,51 +42,16 @@ def parse_cfg(path):
 
     return res
 
-def showimg(img, bgr=False, gray=False):
+def resize_img(img, target_width):
     """
-    shows the image, being handled with opencv, in-line with matplotlib
+    resizes the hand mask to target width
+    """
+    (h, w) = img.shape[:2]
+    r  = h / w
+    dim = (target_width, int(target_width * r))
+    resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
     
-    args:
-        gray: Grayscale option (True or False)
-        bgr: opencv flips RGB to BGR (True or False)
-    """
-    # feel free to resize the figure size as necessary
-    plt.figure(figsize = (8, 10))
-    
-    if bgr:
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        imgplot = plt.imshow(img)
-    elif gray:
-        imgplot = plt.imshow(img, cmap='gray')
-    else:    
-        imgplot = plt.imshow(img)
-    plt.show()
-
-def showimg_file(file):
-    """
-    displays the image directly from the file, in-line with matplotlib
-    """
-    img = mpimg.imread(file) 
-    # feel free to resize the figure size as necessary
-    plt.figure(figsize = (8, 10))
-    imgplot = plt.imshow(img)
-    plt.show()
-
-def get_contours(cnts):
-    """
-    checks the openCV version and returns the contours 
-    """
-    # if '2', it's OpenCV v2.4 or v4
-    if len(cnts) == 2:
-        cnts = cnts[0]
-    # if '3', it's OpenCV v3,
-    elif len(cnts) == 3:
-        cnts = cnts[1]
-    # Otherwise, raise error
-    else:
-        raise Exception(("Unknown Contour Length, Check the OpenCV version"))
-    
-    return cnts
+    return resized
 
 def rotate_bound(image, angle):
     """
@@ -99,15 +80,44 @@ def rotate_bound(image, angle):
     # perform the actual rotation and return the image
     return cv2.warpAffine(image, M, (nW, nH))
 
-def resize_img(img, target_width):
+def showimg(img, bgr=False, gray=False):
     """
-    resizes the hand mask to target width
-    """
-    (h, w) = img.shape[:2]
-    r  = h / w
-    dim = (target_width, int(target_width * r))
-    resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
+    shows the image, being handled with opencv, in-line with matplotlib
     
-    return resized
+    args:
+        gray: Grayscale option (True or False)
+        bgr: opencv flips RGB to BGR (True or False)
+    """
+    # feel free to resize the figure size as necessary
+    plt.figure(figsize = (8, 10))
+    
+    if bgr:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        imgplot = plt.imshow(img)
+    elif gray:
+        imgplot = plt.imshow(img, cmap='gray')
+    else:    
+        imgplot = plt.imshow(img)
+    plt.show()
 
 
+def showimg_file(file):
+    """
+    displays the image directly from the file, in-line with matplotlib
+    """
+    img = mpimg.imread(file) 
+    # feel free to resize the figure size as necessary
+    plt.figure(figsize = (8, 10))
+    imgplot = plt.imshow(img)
+    plt.show()
+
+def strip_paren(text):
+    """
+    strips parenthesis and returns the number
+    """
+    split = list(text)
+    for i in split:
+        if i == '(' or i == ')':
+            split.pop(split.index(i))
+    res = ''.join(split)
+    return res

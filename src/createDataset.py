@@ -15,20 +15,25 @@ import util
 class createDataset(object):
     def __init__(self):
         pass
-   
-    def set_target(self, target):
-        res = []
-        targets = target.split(',')
-        for item in targets:
-            res.append(item)
-        self.target = res
 
-    def set_size(self, size):
-        self.dtSize = size
+    def choose_mask(self, bboxFile):
+        f = open(bboxFile, 'r')
+        content = f.read().split('\n')
+        ind = np.random.randint(len(content) - 1)
+        line = content[ind]
+        words = line.split(',')
 
-    def load_labels(self, pathLabel):
-        self.pathLabel = pathLabel
-        self.labelList = os.listdir(pathLabel)
+        maskFile = words[0]
+        maskCoord = []
+
+        for item in words[1:]:
+            item = util.strip_paren(item)
+            item = item.lstrip().rstrip()
+            maskCoord.append(item)
+
+        f.close()
+
+        return maskFile, maskCoord
 
     def count_target(self):
         tally = {}
@@ -52,10 +57,25 @@ class createDataset(object):
         print('[COUNT] done counting targets in dataset')
         print(tally)
 
+    def load_labels(self, pathLabel):
+        self.pathLabel = pathLabel
+        self.labelList = os.listdir(pathLabel)
+ 
+    def set_target(self, target):
+        res = []
+        targets = target.split(',')
+        for item in targets:
+            res.append(item)
+        self.target = res
+    
+    def set_size(self, size):
+        self.dtSize = size
+       
+
 def main():
     """
     Mode:
-        - train:    create train set
+        - train:    create train dataset
         - test:     create test dataset
         - count:    count the number of images of objects of interest
     """
@@ -79,13 +99,31 @@ def main():
     if mode == 'train':
         c = createDataset()
         c.set_target(TARGET)
-        c.load_labels(TRAIN_LABEL)
-        c.count_target()
+        mask, coord = c.choose_mask(BBOX_TXT)
+        print(mask)
+        print(coord)
 
     elif mode == 'test':
         pass
+    
     else: 
-        pass
+        which = input('Which dataset? train or test? > ')
+       
+        # input assertion
+        assert(which in ['train', 'test']), 'Try again with right input'
+
+        # set right label for each category
+        if which == 'train':
+            label = TRAIN_LABEL
+        else:
+            label = VAL_LABEL
+
+        # count # of objects in the dataset
+        c = createDataset()
+        c.set_target(TARGET)
+        c.load_labels(label)
+        c.count_target()
+
 
 if __name__ == '__main__':
     main()
