@@ -23,7 +23,7 @@ class createDataset(object):
         if bg.shape[0] < mask.shape[0]:
             mask = cv2.resize(mask, (int(0.5*mask.shape[0]), int(0.5*mask.shape[1])), interpolation=cv2.INTER_AREA)
         h_mask, w_mask = mask.shape[:2]
-        h , w = bg.shape[:2]
+        h, w = bg.shape[:2]
         
         # select random location for mask
         h_rand = np.random.rand() * 0.9
@@ -73,10 +73,14 @@ class createDataset(object):
 
     def color_jitter(self, img):
         """randomly changes brightness and contrast of an image"""
+        # define filter not to distort the background
+        filt = (img != 0)
+        
         a = np.random.uniform(0.5, 1.5)
         b = np.random.uniform(-100, 100)
         img = (a * img + b).astype(np.int64)
         img = np.clip(img, 0, 255)
+        img *= filt
 
         return img
         
@@ -109,8 +113,7 @@ class createDataset(object):
         fnewList = open(self.detList, 'w')
 
         ind = 0 # for-loop counter
-        #for ind in range(len(self.labelList)):
-        for ind in range(10):
+        for ind in range(len(self.labelList)):
             labelName = self.pathLabel + self.labelList[ind]
             flabel = open(labelName, 'r')
             content = flabel.read().split('\n')
@@ -200,9 +203,10 @@ class createDataset(object):
                         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                         cv2.imwrite(newImage, img)
                         fnewList.write(newImage + '\n')
-            
-            print(f'[COUNT] {ind} of {len(self.labelList)} processed')
- 
+            if ind % 100 == 0:    
+                print(f'[INFO] {ind} of {len(self.labelList)} processed')
+        
+        print(f'[INFO] done creating dataset')
         fnewList.close()
             
     def load_labels(self, pathLabel):
